@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第一個網頁</title>
+    <style>
+        /* 這裡可以寫一些簡單的樣式（CSS） */
+        body {
+            font-family: "Microsoft JhengHei", Helvetica, Arial, sans-serif;
+            background-color: #f7f9fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        p {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>歡迎來到我的網頁！</h1>
+        <p>這是一個使用 HTML5 產生的基礎頁面。</p>
+        <!-- 互動按鈕 -->
+        <button onclick="greet()">點擊我</button>
+    </div>
+
+    <script>
+        // 這裡可以寫一些簡單的互動邏輯（JavaScript）
+        function greet() {
+            alert('哈囉！歡迎來到網頁的世界！');
+        }
+    </script>
+
+</body>
+</html>
