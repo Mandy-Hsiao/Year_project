@@ -1,1 +1,58 @@
-
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>教師手冊</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f7fb; color: #223; }
+        nav { background: #2f5d9e; padding: 15px 30px; color: white; }
+        nav .nav-links { display: flex; gap: 10px; flex-wrap: wrap; }
+        nav a { color: white; margin-right: 15px; text-decoration: none; padding: 8px 12px; border-radius: 999px; display: inline-block; }
+        .container { max-width: 900px; margin: 30px auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card { margin-bottom: 20px; padding: 15px; border: 1px solid #e0e6ef; border-radius: 8px; }
+        input, textarea, button { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        button { background: #2f5d9e; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .result { background: #eef7ff; padding: 10px; border-radius: 6px; margin-top: 10px; }
+        .chat-shell { border: 1px solid #dce6f3; border-radius: 12px; overflow: hidden; background: #fff; }
+        .chat-shell.theme-salary .chat-header { background: #e67e22; }
+        .chat-shell.theme-salary .message.user .bubble { background: #e67e22; }
+        .chat-shell.theme-salary .message.assistant .bubble { background: #fff3e8; }
+        .chat-shell.theme-absence .chat-header { background: #c0392b; }
+        .chat-shell.theme-absence .message.user .bubble { background: #c0392b; }
+        .chat-shell.theme-absence .message.assistant .bubble { background: #fdecea; }
+        .chat-shell.theme-entry .chat-header { background: #8e44ad; }
+        .chat-shell.theme-entry .message.user .bubble { background: #8e44ad; }
+        .chat-shell.theme-entry .message.assistant .bubble { background: #f5ebff; }
+        .chat-header { background: #2f5d9e; color: white; padding: 12px 16px; font-weight: bold; }
+        .chat-body { padding: 16px; min-height: 320px; background: #f8fbff; }
+        .message { display: flex; margin-bottom: 12px; }
+        .message.user { justify-content: flex-end; }
+        .bubble { max-width: 75%; padding: 10px 12px; border-radius: 14px; line-height: 1.5; }
+        .message.user .bubble { background: #2f5d9e; color: white; }
+        .message.assistant .bubble { background: #e7f0ff; color: #223; }
+        .empty { color: #6b7a90; font-style: italic; }
+        .chat-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #e4ebf5; }
+        .chat-form input { margin: 0; border: 1px solid #cfd8e3; border-radius: 6px; }
+        .chat-form button { width: 90px; margin: 0; }
+        .quick-options { padding: 12px 12px 0; }
+        .quick-options p { margin: 0 0 8px; color: #4d5d75; }
+        .quick-form { display: flex; gap: 8px; flex-wrap: wrap; }
+        .quick-form button { width: auto; padding: 8px 12px; margin: 0; border-radius: 999px; background: #e7f0ff; color: #2f5d9e; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <a class="home" href="/">首頁</a>
+            <a class="salary" href="/salary/">薪資計算</a>
+            <a class="chat-salary" href="/chatbot/salary/">報酬問題</a>
+            <a class="chat-absence" href="/chatbot/absence/">無法到課</a>
+            <a class="chat-entry" href="/chatbot/entry/">入職申請</a>
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
