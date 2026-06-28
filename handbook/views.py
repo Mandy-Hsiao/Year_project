@@ -1,6 +1,13 @@
 from django.shortcuts import render
 
 
+RATE_TABLE = {
+    "國小解題教室": {"base": 10, "preparation": 115, "image": 35, "material": 0},
+    "國中解題教室": {"base": 15, "preparation": 140, "image": 35, "material": 0},
+    "高中解題教室": {"base": 20, "preparation": 165, "image": 35, "material": 0},
+}
+
+
 def home(request):
     return render(request, "home.html")
 
@@ -9,19 +16,36 @@ def salary_calculator(request):
     result = None
     if request.method == "POST":
         try:
-            base_salary = float(request.POST.get("base_salary", 0))
-            teaching_hours = float(request.POST.get("teaching_hours", 0))
-            hourly_rate = float(request.POST.get("hourly_rate", 0))
-            bonus = float(request.POST.get("bonus", 0))
+            lesson_label = request.POST.get("lesson_label", "")
+            duration_minutes = float(request.POST.get("duration_minutes", 0))
+            question_count = float(request.POST.get("question_count", 0))
 
-            total_salary = base_salary + (teaching_hours * hourly_rate) + bonus
-            result = {
-                "base_salary": base_salary,
-                "teaching_hours": teaching_hours,
-                "hourly_rate": hourly_rate,
-                "bonus": bonus,
-                "total_salary": total_salary,
-            }
+            rate = RATE_TABLE.get(lesson_label)
+            if not rate:
+                result = {"error": "請選擇有效的課程標籤。"}
+            else:
+                base_fee = rate["base"]
+                preparation_fee = rate["preparation"]
+                image_fee = rate["image"]
+                material_fee = rate["material"]
+                base_duration_fee = preparation_fee + image_fee + material_fee
+                scale = duration_minutes / 30 if duration_minutes else 0
+                duration_fee = round(base_duration_fee * scale, 2)
+                question_fee = round(question_count * base_fee, 2)
+
+                total_salary = round(duration_fee + question_fee, 2)
+                result = {
+                    "lesson_label": lesson_label,
+                    "duration_minutes": duration_minutes,
+                    "question_count": question_count,
+                    "base_fee": base_fee,
+                    "preparation_fee": preparation_fee,
+                    "image_fee": image_fee,
+                    "material_fee": material_fee,
+                    "duration_fee": duration_fee,
+                    "question_fee": question_fee,
+                    "total_salary": total_salary,
+                }
         except ValueError:
             result = {"error": "請輸入有效的數字。"}
 
