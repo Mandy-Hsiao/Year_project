@@ -19,7 +19,6 @@ nav .nav-links {
 
 nav a {
     color: white;
-    margin-right: 15px;
     text-decoration: none;
     padding: 8px 12px;
     border-radius: 999px;
@@ -32,7 +31,7 @@ nav a {
     background: white;
     padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card {
@@ -42,12 +41,21 @@ nav a {
     border-radius: 8px;
 }
 
+h2 {
+    margin-top: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 input,
 textarea,
 button,
 select {
     padding: 8px;
-    margin: 5px 0;
     width: 100%;
     box-sizing: border-box;
 }
@@ -72,42 +80,6 @@ button {
     border-radius: 12px;
     overflow: hidden;
     background: #fff;
-}
-
-.chat-shell.theme-salary .chat-header {
-    background: #e67e22;
-}
-
-.chat-shell.theme-salary .message.user .bubble {
-    background: #e67e22;
-}
-
-.chat-shell.theme-salary .message.assistant .bubble {
-    background: #fff3e8;
-}
-
-.chat-shell.theme-absence .chat-header {
-    background: #c0392b;
-}
-
-.chat-shell.theme-absence .message.user .bubble {
-    background: #c0392b;
-}
-
-.chat-shell.theme-absence .message.assistant .bubble {
-    background: #fdecea;
-}
-
-.chat-shell.theme-entry .chat-header {
-    background: #8e44ad;
-}
-
-.chat-shell.theme-entry .message.user .bubble {
-    background: #8e44ad;
-}
-
-.chat-shell.theme-entry .message.assistant .bubble {
-    background: #f5ebff;
 }
 
 .chat-header {
@@ -170,4 +142,46 @@ button {
 .chat-form button {
     width: 90px;
     margin: 0;
+}
+
+.chat-shell.theme-salary .chat-header,
+.chat-shell.theme-salary .message.user .bubble {
+    background: #e67e22;
+}
+
+.chat-shell.theme-salary .message.assistant .bubble {
+    background: #fff3e8;
+}
+
+.chat-shell.theme-absence .chat-header,
+.chat-shell.theme-absence .message.user .bubble {
+    background: #c0392b;
+}
+
+.chat-shell.theme-absence .message.assistant .bubble {
+    background: #fdecea;
+}
+
+.chat-shell.theme-entry .chat-header,
+.chat-shell.theme-entry .message.user .bubble {
+    background: #8e44ad;
+}
+
+.chat-shell.theme-entry .message.assistant .bubble {
+    background: #f5ebff;
+}
+
+@media (max-width: 700px) {
+    .container {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .chat-form {
+        flex-direction: column;
+    }
+
+    .chat-form button {
+        width: 100%;
+    }
 }
