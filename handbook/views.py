@@ -24,21 +24,17 @@ def salary_calculator(request):
             if not rate:
                 result = {"error": "請選擇有效的課程標籤。"}
             else:
-                base_fee = rate["base"]
                 preparation_fee = rate["preparation"]
                 image_fee = rate["image"]
                 material_fee = rate["material"]
-                base_duration_fee = preparation_fee + image_fee + material_fee
-                scale = duration_minutes / 30 if duration_minutes else 0
-                duration_fee = round(base_duration_fee * scale, 2)
+                base_fee = rate["base"]
+                duration_fee = round((preparation_fee + image_fee + material_fee) * (duration_minutes / 30), 2)
                 question_fee = round(question_count * base_fee, 2)
-
                 total_salary = round(duration_fee + question_fee, 2)
                 result = {
                     "lesson_label": lesson_label,
                     "duration_minutes": duration_minutes,
                     "question_count": question_count,
-                    "base_fee": base_fee,
                     "preparation_fee": preparation_fee,
                     "image_fee": image_fee,
                     "material_fee": material_fee,
@@ -84,23 +80,17 @@ def get_answer(question, theme):
 
     if theme == "salary":
         if any(keyword in q for keyword in ["薪水", "salary", "待遇", "津貼", "報酬", "pay"]):
-            return "報酬問題：教師薪水通常由底薪、授課時數與獎金組成；若需要估算，可以使用薪資計算功能。"
+            return "報酬問題：教學報酬由準備費、形象費、教材加給與解題費組成。"
         return "這是報酬專區，您可以詢問薪水、待遇、津貼或報酬相關問題。"
 
     if theme == "absence":
         if any(keyword in q for keyword in ["請假", "缺課", "不能到課", "無法到課", "遲到", "leave", "absent"]):
-            return "無法到課問題：請先向學校行政單位或系主任說明情況，並依照流程提交請假或補課申請。"
+            return "請先向學校行政單位或系主任說明情況，並依照流程提交請假或補課申請。"
         return "這是請假與缺課專區，您可以詢問無法到課、請假或補課相關問題。"
 
     if theme == "entry":
         if any(keyword in q for keyword in ["入職", "報到", "申請", " onboarding", "hire", "入用"]):
-            return "入職申請問題：入職時需準備相關證件、完成報到流程，並確認學校要求的文件與時間。"
+            return "入職時需準備相關證件、完成報到流程，並確認學校要求的文件與時間。"
         return "這是入職申請專區，您可以詢問報到、申請文件或入職流程相關問題。"
-
-    if any(keyword in q for keyword in ["規則", "規定", "須知", "授課", "課程"]):
-        return "教師須遵守授課時間、出勤紀錄、評分標準與學生輔導規範，並維持專業倫理。"
-
-    if any(keyword in q for keyword in ["謝謝", "thank", "thank you"]):
-        return "不客氣，若還有其他問題我可以繼續協助。"
 
     return "請直接輸入與此主題相關的問題。"
