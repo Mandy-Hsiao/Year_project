@@ -1,3 +1,5 @@
+import uuid
+
 from django.shortcuts import render
 
 
@@ -61,7 +63,8 @@ def entry_chatbot(request):
 
 
 def render_chatbot(request, theme, title):
-    session_key = f"chat_messages_{theme}"
+    chat_id = request.GET.get("chat_id") or request.POST.get("chat_id") or str(uuid.uuid4())
+    session_key = f"chat_messages_{theme}_{chat_id}"
     messages = request.session.get(session_key, [])
 
     if request.method == "POST":
@@ -72,7 +75,29 @@ def render_chatbot(request, theme, title):
             request.session[session_key] = messages
             request.session.modified = True
 
-    return render(request, "chatbot.html", {"messages": messages, "title": title, "theme": theme})
+    history = []
+    history_keys = [key for key in request.session.keys() if key.startswith(f"chat_messages_{theme}_")]
+    for index, key in enumerate(history_keys, start=1):
+        if key == session_key:
+            history.append({"chat_id": chat_id, "label": f"對話 {index}"})
+        else:
+            history.append({"chat_id": key.replace(f"chat_messages_{theme}_", ""), "label": f"對話 {index}"})
+
+    if not history:
+        history.append({"chat_id": chat_id, "label": "對話 1"})
+
+    return render(
+        request,
+        "chatbot.html",
+        {
+            "messages": messages,
+            "title": title,
+            "theme": theme,
+            "chat_id": chat_id,
+            "history": history,
+            "theme_label": title,
+        },
+    )
 
 
 def get_answer(question, theme):

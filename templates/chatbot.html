@@ -1,23 +1,49 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="chat-shell {% if theme == 'salary' %}theme-salary{% elif theme == 'absence' %}theme-absence{% elif theme == 'entry' %}theme-entry{% endif %}">
-    <div class="chat-header">{{ title }}</div>
-    <div class="chat-body">
-        {% if messages %}
-            {% for msg in messages %}
-                <div class="message {{ msg.role }}">
-                    <div class="bubble">{{ msg.content }}</div>
-                </div>
+<div class="chat-layout {% if theme == 'salary' %}theme-salary{% elif theme == 'absence' %}theme-absence{% elif theme == 'entry' %}theme-entry{% endif %}">
+    <aside class="chat-sidebar">
+        <div class="sidebar-top">
+            <h3>{{ title }}</h3>
+            <button type="button" class="new-chat-link" onclick="openNewChatTab()">新增對話</button>
+        </div>
+        <div class="history-list">
+            {% for item in history %}
+                <a class="history-item {% if item.chat_id == chat_id %}active{% endif %}" href="{{ request.path }}?chat_id={{ item.chat_id }}">
+                    <span>{{ item.label }}</span>
+                </a>
             {% endfor %}
-        {% else %}
-            <div class="empty">您好，這是{{ title }}專區，請直接輸入您的問題。</div>
-        {% endif %}
-    </div>
+        </div>
+    </aside>
 
-    <form method="post" class="chat-form">
-        {% csrf_token %}
-        <input type="text" name="question" placeholder="輸入你的問題..." required>
-        <button type="submit">送出</button>
-    </form>
+    <div class="chat-shell">
+        <div class="chat-header">
+            <span>{{ title }}</span>
+        </div>
+        <div class="chat-body">
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="message {{ msg.role }}">
+                        <div class="bubble">{{ msg.content }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">您好，這是{{ title }}專區，請直接輸入您的問題。</div>
+            {% endif %}
+        </div>
+
+        <form method="post" class="chat-form">
+            {% csrf_token %}
+            <input type="hidden" name="chat_id" value="{{ chat_id }}">
+            <input type="text" name="question" placeholder="輸入你的問題..." required>
+            <button type="submit">送出</button>
+        </form>
+    </div>
 </div>
+<script>
+function openNewChatTab() {
+    const url = new URL(window.location.href);
+    url.searchParams.set('chat_id', crypto.randomUUID());
+    window.open(url.toString(), '_blank', 'noopener,noreferrer');
+}
+</script>
 {% endblock %}
