@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>薪資計算</h2>
+<h2>授課報酬計算</h2>
+<p>正常完課、單堂授課報酬，以課程標籤計算，包含準備費、形象費與教材加給。</p>
 <form method="post">
     {% csrf_token %}
-    <label>底薪</label>
-    <input type="number" step="0.01" name="base_salary" required>
+    <label>課程標籤</label>
+    <select name="lesson_label" required>
+        <option value="">請選擇</option>
+        <option value="國小解題教室">國小解題教室</option>
+        <option value="國中解題教室">國中解題教室</option>
+        <option value="高中解題教室">高中解題教室</option>
+    </select>
 
-    <label>授課時數</label>
-    <input type="number" step="0.01" name="teaching_hours" required>
+    <label>授課時長（分鐘）</label>
+    <input type="number" step="1" name="duration_minutes" required>
 
-    <label>每小時薪資</label>
-    <input type="number" step="0.01" name="hourly_rate" required>
-
-    <label>獎金</label>
-    <input type="number" step="0.01" name="bonus" required>
+    <label>解題數量（題）</label>
+    <input type="number" step="1" name="question_count" required>
 
     <button type="submit">計算薪水</button>
 </form>
@@ -23,10 +26,14 @@
         {% if result.error %}
             <p>{{ result.error }}</p>
         {% else %}
-            <p><strong>底薪：</strong> {{ result.base_salary }}</p>
-            <p><strong>授課時數：</strong> {{ result.teaching_hours }}</p>
-            <p><strong>每小時薪資：</strong> {{ result.hourly_rate }}</p>
-            <p><strong>獎金：</strong> {{ result.bonus }}</p>
+            <p><strong>課程標籤：</strong> {{ result.lesson_label }}</p>
+            <p><strong>授課時長：</strong> {{ result.duration_minutes }} 分鐘</p>
+            <p><strong>解題數量：</strong> {{ result.question_count }} 題</p>
+            <p><strong>準備費：</strong> {{ result.preparation_fee }}</p>
+            <p><strong>形象費：</strong> {{ result.image_fee }}</p>
+            <p><strong>教材加給：</strong> {{ result.material_fee }}</p>
+            <p><strong>授課基礎費：</strong> {{ result.duration_fee }}</p>
+            <p><strong>解題費用：</strong> {{ result.question_fee }}</p>
             <p><strong>總薪資：</strong> {{ result.total_salary }}</p>
         {% endif %}
     </div>
