@@ -96,6 +96,7 @@ def render_chatbot(request, theme, title):
             "chat_id": chat_id,
             "history": history,
             "theme_label": title,
+            "new_chat_id": str(uuid.uuid4()),
         },
     )
 

@@ -4,7 +4,7 @@
     <aside class="chat-sidebar">
         <div class="sidebar-top">
             <h3>{{ title }}</h3>
-            <button type="button" class="new-chat-link" onclick="openNewChatTab()">新增對話</button>
+            <a class="new-chat-link" href="{{ request.path }}?chat_id={{ new_chat_id }}">新增對話</a>
         </div>
         <div class="history-list">
             {% for item in history %}
@@ -39,11 +39,4 @@
         </form>
     </div>
 </div>
-<script>
-function openNewChatTab() {
-    const url = new URL(window.location.href);
-    url.searchParams.set('chat_id', crypto.randomUUID());
-    window.open(url.toString(), '_blank', 'noopener,noreferrer');
-}
-</script>
 {% endblock %}
