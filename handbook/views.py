@@ -1,7 +1,7 @@
 import uuid
 
 from django.shortcuts import render
-
+from .models import ChatbotFAQ
 
 RATE_TABLE = {
     "國小解題教室": {"base": 10, "preparation": 115, "image": 35, "material": 0},
@@ -102,21 +102,33 @@ def render_chatbot(request, theme, title):
 
 
 def get_answer(question, theme):
-    q = question.lower()
+    q = question.lower().strip()
+    
+    # 1. 從資料庫抓出所有的問答資料
+    all_faqs = ChatbotFAQ.objects.all()
+    
+    # 2. 透過迴圈進行「雙向比對」
+    for faq in all_faqs:
+        db_question = faq.question.lower()
+        
+        # 情況 A：使用者輸入短字詞 (例如「環境」)，看有沒有包含在資料庫的長問題中
+        if q in db_question:
+            return faq.answer
+            
+        # 情況 B：使用者輸入長句子 (例如「我明天想請假」)，看資料庫設定的關鍵字有沒有在句子裡
+        # 將資料庫裡用逗號分隔的關鍵字切開來逐一比對
+        keywords = db_question.replace('、', ',').split(',')
+        for kw in keywords:
+            kw = kw.strip()
+            if kw and kw in q:
+                return faq.answer
 
+    # 3. 如果資料庫真的都找不到匹配的答案，才退回到各主題的「預設引導訊息」
     if theme == "salary":
-        if any(keyword in q for keyword in ["薪水", "salary", "待遇", "津貼", "報酬", "pay"]):
-            return "報酬問題：教學報酬由準備費、形象費、教材加給與解題費組成。"
         return "這是報酬專區，您可以詢問薪水、待遇、津貼或報酬相關問題。"
-
-    if theme == "absence":
-        if any(keyword in q for keyword in ["請假", "缺課", "不能到課", "無法到課", "遲到", "leave", "absent"]):
-            return "請先向學校行政單位或系主任說明情況，並依照流程提交請假或補課申請。"
+    elif theme == "absence":
         return "這是請假與缺課專區，您可以詢問無法到課、請假或補課相關問題。"
-
-    if theme == "entry":
-        if any(keyword in q for keyword in ["入職", "報到", "申請", " onboarding", "hire", "入用"]):
-            return "入職時需準備相關證件、完成報到流程，並確認學校要求的文件與時間。"
+    elif theme == "entry":
         return "這是入職申請專區，您可以詢問報到、申請文件或入職流程相關問題。"
 
-    return "請直接輸入與此主題相關的問題。"
+    return "請直接輸入與此主題相關的問題，或嘗試輸入更簡短的關鍵字（例如：「申請」、「環境」）。"
